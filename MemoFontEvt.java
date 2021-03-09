@@ -1,6 +1,5 @@
 package kr.co.sist.javamemo.evt;
 
-import java.awt.Choice;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,142 +9,129 @@ import java.awt.event.WindowAdapter;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import kr.co.sist.javamemo.run.JavaMemo;
-import kr.co.sist.javamemo.run.MemoFont;
+import kr.co.sist.javamemo.MemoFont;
 
 /**
- *	±Û²Ã µğÀÚÀÎÀÇ ÀÌº¥Æ® Ã³¸® Å¬·¡½º
+ * ê¸€ê¼´ ë””ìì¸ì˜ ì´ë²¤íŠ¸ ì²˜ë¦¬ í´ë˜ìŠ¤.
  * @author user
  */
-public class MemoFontEvt extends WindowAdapter 
-implements ActionListener, ListSelectionListener, ItemListener{
+public class MemoFontEvt extends WindowAdapter
+		implements ActionListener, ListSelectionListener, ItemListener {
 
 	private MemoFont mf;
-	
-	private String[] formatArr; //ÇÊ¿ä ¤¤
-	private String[] styleArr; //ÇÊ¿ä ¤¤
 
+	private String[] formatArr;
+	private String[] styleArr;
+	
 	private JList<String> jlFormat, jlStyle, jlSize;
 	
-	private Font memoFont;//JTextAreaÀÇ ÆùÆ® Á¤º¸¸¦ ÀúÀåÇÏ´Â ÆùÆ®°´Ã¼. (¹Ì¸®º¸±â(JLabel)¿Í °°À½)  //ÇÊ¿ä ¤¤
-	
-	private Object jbtnConfirm, jbtnCancel;
-	private JTextArea jtaNote;
-	
+	private Font memoFont;//JTextAreaì˜ í°íŠ¸ì •ë³´ë¥¼ ì €ì¥í•˜ëŠ” í°íŠ¸ê°ì²´.ë¯¸ë¦¬ë³´ê¸° JLabelê³¼ ê°™ë‹¤. 
 	/**
-	 * 	Áö¿ø ±Û²Ã : "Dialog", "DialogInput", "Monospaced", "Serif", "SansSerif", "¸¼Àº °íµñ", "±Ã¼­Ã¼" <br>
-	 * 	Áö¿ø ½ºÅ¸ÀÏ : "º¸Åë", "±½°Ô", "±â¿ïÀÓ²Ã", "±½Àº ±â¿ïÀÓ²Ã"  <br>
+	 * ì§€ì› ê¸€ê¼´ :"Dialog", "DialogInput", "Monospaced", "Serif", "SansSerif", "ë§‘ì€ ê³ ë”•", "ê¶ì„œì²´"<br>
+	 * ì§€ì› ìŠ¤íƒ€ì¼ :  "ë³´í†µ", "êµµê²Œ", "ê¸°ìš¸ì„ê¼´", "êµµì€ ê¸°ìš¸ì„ê¼´"<br>
 	 * @param mf
 	 */
-	public MemoFontEvt (MemoFont mf) {
-		this.mf= mf;
-		 formatArr = new String[] { "Dialog", "DialogInput", "Monospaced", "Serif", "SansSerif", "¸¼Àº °íµñ", "±Ã¼­Ã¼" };
-		 styleArr = new String[] { "º¸Åë", "±½°Ô", "±â¿ïÀÓ²Ã", "±½Àº ±â¿ïÀÓ²Ã" };
-		 
-		 DefaultListModel<String> dlmFormat = mf.getDlmFormat();
-		 DefaultListModel<String> dlmStyle = mf.getDlmStyle();
-		 DefaultListModel<String> dlmSize = mf.getDlmSize();
-		 
-		 //±Û²Ã ¼³Á¤
-			for (int i = 0; i < formatArr.length; i++) {
-				dlmFormat.addElement(formatArr[i]);
-			}//end for
-			
-			//½ºÅ¸ÀÏ ¼³Á¤
-			for (int i = 0; i < styleArr.length; i++) {
-				dlmStyle.addElement(styleArr[i]);
-			}//end for
-			
-			//Å©±â ¼³Á¤
-			dlmSize.addElement(String.valueOf("7"));
-			dlmSize.addElement(String.valueOf("8"));
-			dlmSize.addElement(String.valueOf("9"));
-			for (int i = 10; i < 81; i+=2) {
-					dlmSize.addElement(String.valueOf(i));
-				}//end for
-			
-			//¹Ì¸®º¸±â
-			mf.getChPreview().add("ÇÑ±Û");
-			mf.getChPreview().add("¿µ¾î");
-			
-			jlFormat = mf.getJlFormat(); //°ªÀ» ¼³Á¤ÇÑ JList¸¦ ¾ò´Â´Ù
-			jlStyle = mf.getJlStyle(); //°ªÀ» ¼³Á¤ÇÑ JList¸¦ ¾ò´Â´Ù
-			jlSize = mf.getJlSize(); //°ªÀ» ¼³Á¤ÇÑ JList¸¦ ¾ò´Â´Ù
-			
-			
-			//ºÎ¸ğÃ¢ÀÇ JTextAreaÆùÆ®Á¤º¸¸¦ ¾ò´Â´Ù
-			//JlPreview °´Ã¼ (¹Ì¸®º¸±âÀÇ) FontÁ¤º¸¿¡ ¼³Á¤
-			mf.getJlbPreview().setFont( mf.getJm().getJtaNote().getFont() );
-			
-			memoFont = mf.getJlbPreview().getFont();
-			
-			//JTextField¿¡ ÀĞ¾îµéÀÎ ±Û²Ã Á¤º¸¸¦ ¼³Á¤ÇÑ´Ù
-			mf.getJtfFormat().setText(memoFont.getFamily());
-			mf.getJtfStyle().setText( styleArr [memoFont.getStyle()] );
-			mf.getJtfSize().setText(String.valueOf(memoFont.getSize()));
-			
+	public MemoFontEvt( MemoFont mf ) {
+		this.mf=mf;
+		formatArr =new String[]{ "Dialog", "DialogInput", "Monospaced", "Serif", "SansSerif", "ë§‘ì€ ê³ ë”•", "ê¶ì„œì²´" };
+		styleArr =new String[] { "ë³´í†µ", "êµµê²Œ", "ê¸°ìš¸ì„ê¼´", "êµµì€ ê¸°ìš¸ì„ê¼´" };
+		
+		DefaultListModel<String> dlmFormat=mf.getDlmFormat();
+		DefaultListModel<String> dlmStyle=mf.getDlmStyle();
+		DefaultListModel<String> dlmSize=mf.getDlmSize();
+		//ê¸€ê¼´ ì„¤ì •
+		for (int i = 0; i < formatArr.length; i++) {
+			dlmFormat.addElement(formatArr[i]);
+		}//end for
+		
+		//ìŠ¤íƒ€ì¼ ì„¤ì •.
+		for (int i = 0; i < styleArr.length; i++) {
+			dlmStyle.addElement(styleArr[i]);
+		}//end for
+		
+		//í¬ê¸°ì„¤ì •.
+		dlmSize.addElement(String.valueOf("7"));
+		dlmSize.addElement(String.valueOf("8"));
+		dlmSize.addElement(String.valueOf("9"));
+		for (int i = 10; i < 81; i+=2) {
+			dlmSize.addElement(String.valueOf(i));
+		}//end for
+		
+		//ë¯¸ë¦¬ë³´ê¸°
+		mf.getChPreview().add("í•œê¸€");
+		mf.getChPreview().add("ì˜ì–´");
+		
+		jlFormat=mf.getJlFormat(); //ê°’ì„ ì„¤ì •í•œ JListë¥¼ ì–»ëŠ”ë‹¤.
+		jlStyle=mf.getJlStyle(); //ê°’ì„ ì„¤ì •í•œ JListë¥¼ ì–»ëŠ”ë‹¤.
+		jlSize=mf.getJlSize(); //ê°’ì„ ì„¤ì •í•œ JListë¥¼ ì–»ëŠ”ë‹¤.
+		
+		//ë¶€ëª¨ì°½ì˜ JTextAreaí°íŠ¸ì •ë³´ë¥¼ ì–»ëŠ”ë‹¤.
+		//JlPreviewê°ì²´ Fontì •ë³´ì—ë„ ì„¤ì •.
+		mf.getJlbPreview().setFont( mf.getJm().getJtaNote().getFont() );
+		
+		memoFont=mf.getJlbPreview().getFont();
+		
+		//JTextFieldì— ì½ì–´ë“¤ì¸ ê¸€ê¼´ ì •ë³´ë¥¼ ì„¤ì •í•œë‹¤.
+		mf.getJtfFormat().setText(memoFont.getFamily());
+		mf.getJtfStyle().setText(   styleArr[ memoFont.getStyle() ] );
+		mf.getJtfSize().setText( String.valueOf(memoFont.getSize()));
+		
 	}//MemoFontEvt
-	
+
 	@Override
 	public void itemStateChanged(ItemEvent ie) {
 		
 	}//itemStateChanged
 
 	@Override
-	public void valueChanged(ListSelectionEvent lse) {//ÀÌº¥Æ®¸¦ ¹ß»ı½ÃÅ² ÄÄÆ÷³ÍÆ®°¡ »ı¼ºÇÑ ÀÌº¥Æ® °´Ã¼
-		
-	if( lse.getValueIsAdjusting() ) {
-		
-		//JList¿¡¼­ ÀÌº¥Æ®°¡ ¹ß»ıÇÏ¿´´Ù¸é "¹Ì¸®º¸±â"ÆùÆ®ÀÇ Á¤º¸¸¦ º¯¼ö¿¡ ÀúÀå
-		Font previewFont = mf.getJlbPreview().getFont();
-		String fontFamily = mf.getJlbPreview().getFont().getFamily();
-		int fontStyle = mf.getJlbPreview().getFont().getStyle();
-		int fontSize = mf.getJlbPreview().getFont().getSize();
-		
-		if( lse.getSource() == jlFormat ) {//Æ÷¸ËÀÌ Å¬¸¯ µÇ¾úÀ» ‹š
+	public void valueChanged(ListSelectionEvent lse) {//ì´ë²¤íŠ¸ë¥¼ ë°œìƒì‹œí‚¨ ì»´í¬ë„ŒíŠ¸ê°€ ìƒì„±í•œ ì´ë²¤íŠ¸ ê°ì²´.
+	
+		if( lse.getValueIsAdjusting() ){
+			// JLlistì—ì„œ ì´ë²¤íŠ¸ê°€ ë°œìƒ í•˜ì˜€ë‹¤ë©´ "ë¯¸ë¦¬ë³´ê¸°" í°íŠ¸ì˜ ì •ë³´ë¥¼ ë³€ìˆ˜ì— ì €ì¥
+			Font previewFont=mf.getJlbPreview().getFont();
+			String fontFamily=previewFont.getFamily();//Dialog
+			int fontStyle=previewFont.getStyle();//ì¼ë°˜
+			int fontSize=previewFont.getSize();//10
+			
+			if( lse.getSource() == jlFormat  ) {//í¬ë©§ì´ í´ë¦­ ë˜ì—ˆì„ ë•Œ
 				mf.getJtfFormat().setText(jlFormat.getSelectedValue());
-				fontFamily = jlFormat.getSelectedValue(); //¼±ÅÃÇÑ ÆùÆ®ÀÇ Á¤º¸¸¦ ¼³Á¤
-		}//end if
-		
-		if( lse.getSource() == jlStyle ) {//½ºÅ¸ÀÏÀÌ Å¬¸¯ µÇ¾úÀ» ‹š
+				fontFamily=jlFormat.getSelectedValue();//ì„ íƒí•œ í°íŠ¸ì˜ ì •ë³´ë¥¼ ì„¤ì •.
+			}//end if
+			
+			if( lse.getSource() == jlStyle  ) {// ìŠ¤íƒ€ì¼ì´ í´ë¦­ë˜ì—ˆì„ ë•Œ
 				mf.getJtfStyle().setText(jlStyle.getSelectedValue());
-				fontStyle = jlStyle.getSelectedIndex();
+				//ì¼ë°˜, ì§„í•˜ê²Œê°€ì•„ë‹Œ 0, 1, 2 ìˆ«ìë¡œ ìŠ¤íƒ€ì¼ì´ ì‚¬ìš©ë˜ê¸° ë•Œë¬¸ì— ì„ íƒí•œ ì¸ë±ìŠ¤ë¥¼ ì–»ëŠ”ë‹¤.
+				fontStyle=jlStyle.getSelectedIndex(); 
+			}//end if
+			
+			if( lse.getSource() == jlSize  ) {// í¬ê¸°ê°€ í´ë¦­ ë˜ì—ˆì„ ë•Œ
+				mf.getJtfSize().setText(jlSize.getSelectedValue());
+				fontSize=Integer.parseInt( jlSize.getSelectedValue());
+			}//end if
+			
+			//ìœ„ì—ì„œ ì„¤ì •ëœ ì •ë³´ë¥¼ ê°€ì§€ê³  JlPreviewë¥¼ ë³€ê²½í•˜ì—¬ ì‚¬ìš©ìê°€ ì–´ë–¤ í°íŠ¸ì •ë³´ë¥¼ ì‚¬ìš©í•  ê²ƒì¸ì§€
+			//ë¯¸ë¦¬ ë³´ì—¬ì¤€ë‹¤.
+			Font tempFont=new Font(fontFamily, fontStyle, fontSize);
+			mf.getJlbPreview().setFont( tempFont );
 		}//end if
-		
-		if( lse.getSource() == jlSize ) {//Å©±â°¡ Å¬¸¯ µÇ¾úÀ» ‹š
-				mf.getJtfSize().setText( jlSize.getSelectedValue() );
-				//ÀÏ¹İ, ÁøÇÏ°Ô °¡ ¾Æ´Ñ 0,1,2 ¼ıÀÚ·Î ½ºÅ¸ÀÏÀÌ »ç¿ëµÇ±â ¶§¹®¿¡ ¼±ÅÃÇÑ ÀÎµ¦½º¸¦ ¾ò´Â´Ù
-				fontSize = Integer.parseInt( jlSize.getSelectedValue() ); 
-		}//end if
-		
-		//À§¿¡¼­ ¼³Á¤µÈ Á¤º¸¸¦ °¡Áö°í JlPreview¸¦ º¯°æÇÏ¿© »ç¿ëÀÚ°¡ ÆùÆ®Á¤º¸¸¦ »ç¿ëÇÒ °ÍÀÎÁö
-		//¹Ì¸® º¸¿©ÁØ´Ù
-		Font tempFont = new Font(fontFamily, fontStyle, fontSize);
-		mf.getJlbPreview().setFont(tempFont);
-		
-	}//end if
-}//valueChanged
+	}//valueChanged
+
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		jbtnConfirm = mf.getJbtnConfirm(); //°ªÀ» ¼³Á¤ÇÑ JList¸¦ ¾ò´Â´Ù
-		jbtnCancel = mf.getJbtnCancel(); //°ªÀ» ¼³Á¤ÇÑ JList¸¦ ¾ò´Â´Ù
-		if (ae.getSource() == jbtnConfirm ) {
-			String fontFamily = mf.getJlbPreview().getFont().getFamily();
-			int fontStyle = mf.getJlbPreview().getFont().getStyle();
-			int fontSize = mf.getJlbPreview().getFont().getSize();
-
-			Font tempFont = new Font(fontFamily, fontStyle, fontSize);
-			JavaMemo pMemo = (JavaMemo) mf.getParent();
-			pMemo.getJtaNote().setFont(tempFont);
+		if(ae.getSource() == mf.getJbtnConfirm()){//ì ìš©ë²„íŠ¼
+			//ë¯¸ë¦¬ë³´ê¸°ë¼ë²¨ì— ì„¤ì •ëœ Font ì •ë³´ë¥¼ ê°€ì ¸ì™€ì„œ
+			Font font = mf.getJlbPreview().getFont();
+			// JavaMemo(ë¶€ëª¨ì°½)ì˜ JTextAreaì— ì„¤ì •
+			mf.getJm().getJtaNote().setFont(font);
+		}//end if
+//		if(ae.getSource() == mf.getJbtnCancel()){//ì·¨ì†Œë²„íŠ¼ ->êµ³ì´ ì•ˆí•´ë„ ë¨
 			mf.dispose();
-		}
-		if (ae.getSource() ==  jbtnCancel ) {
-			mf.dispose();
-		}
+//		}//end if
+		
+		
 	}//actionPerformed
 	
 }//class
