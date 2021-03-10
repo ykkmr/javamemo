@@ -1,4 +1,6 @@
-package kr.co.sist.javamemo.run;
+package kr.co.sist.javamemo;
+
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -12,71 +14,82 @@ import kr.co.sist.javamemo.evt.JavaMemoEvt;
 @SuppressWarnings("serial")
 public class JavaMemo extends JFrame {
 
-	private JMenuItem jmiNew, jmiOpen, jmiSave, jmiNewSave, jmiEnd, jmiFont, jmiHelp ;
-	//»õ±Û, ¿­±â, ÀúÀå, »õÀÌ¸§, Á¾·á, ±Û²Ã, µµ¿ò¸»
+	private JMenuItem jmiNew, jmiOpen, jmiSave, jmiNewSave, jmiEnd, jmiFont, jmiHelp;
+	//ìƒˆê¸€, ì—´ê¸°,ì €ì¥, ìƒˆì´ë¦„ìœ¼ë¡œ, ì¢…ë£Œ, ê¸€ê¼´, ë„ì›€ë§
 	private JTextArea jtaNote;
 	
-	public JavaMemo() {
-		super("¸Ş¸ğÀå");
+	public JavaMemo( Font initFont ) {
+		super("ë©”ëª¨ì¥");
 		
-		//ÄÄÆ÷³ÍÆ® »ı¼º
-		JMenuBar jmb = new JMenuBar();
+		//ì»´í¬ë„ŒíŠ¸ ìƒì„±.
+		JMenuBar jmb=new JMenuBar();
 		
-		JMenu jmFile = new JMenu("ÆÄÀÏ");
-		JMenu jmFormat = new JMenu("¼­½Ä");
-		JMenu jmHelp = new JMenu("µµ¿ò¸»");
+		JMenu jmFile=new JMenu("íŒŒì¼");
+		JMenu jmFormat=new JMenu("ì„œì‹");
+		JMenu jmHelp=new JMenu("ë„ì›€ë§");
 		
-		jmiNew = new JMenuItem("»õ±Û");
-		jmiOpen = new JMenuItem("¿­±â");
-		jmiSave = new JMenuItem("ÀúÀå");
-		jmiNewSave = new JMenuItem("»õÀÌ¸§À¸·Î");
-		jmiEnd = new JMenuItem("Á¾·á");
-		jmiFont = new JMenuItem("±Û²Ã");
-		jmiHelp = new JMenuItem("¸Ş¸ğÀåÁ¤º¸");
+		jmiNew=new JMenuItem("ìƒˆê¸€");
+		jmiOpen=new JMenuItem("ì—´ê¸°");
+		jmiSave=new JMenuItem("ì €ì¥");
+		jmiNewSave=new JMenuItem("ìƒˆì´ë¦„ìœ¼ë¡œ"); 
+		jmiEnd=new JMenuItem("ì¢…ë£Œ"); 
+		jmiFont=new JMenuItem("ê¸€ê¼´"); 
+		jmiHelp=new JMenuItem("ë©”ëª¨ì¥ì •ë³´");
 		
-		jtaNote = new JTextArea();
-		JScrollPane jspNote = new JScrollPane(jtaNote); //½ºÅ©·Ñ¹Ù°¡ ¾ø´Â °´Ã¼¿¡ ½ºÅ©·Ñ¹Ù¸¦ ºÙÀÎ´Ù
-		
-		//¹èÄ¡
-		//¸Ş´º¾ÆÀÌÅÛ-> ¸Ş´º ¹èÄ¡ ( ±¸ºĞ¼± ÇÊ¿ä : addSeparator() )
-		jmFile.add(jmiNew); //»õ±Û
+		jtaNote=new JTextArea();
+		//ì½ì–´ë“¤ì¸ í°íŠ¸ë¥¼ ì„¤ì •í•œë‹¤
+		if( initFont != null ) {//ì½ì–´ë“¤ì¸ í°íŠ¸ê°€ ì¡´ì¬í•œë‹¤ë©´ JTextAreaì— í°íŠ¸ë¥¼ ì„¤ì •í•œë‹¤
+			jtaNote.setFont(initFont);
+		}//end if
+		JScrollPane jspNote=new JScrollPane( jtaNote );//ìŠ¤í¬ë¡¤ë°”ê°€ ì—†ëŠ” ê°ì²´ì— ìŠ¤í¬ë¡¤ë°”ë¥¼ ë¶™ì¸ë‹¤.  
+				
+		//ë°°ì¹˜.
+		//ë©”ë‰´ì•„ì´í…œ->ë©”ë‰´ ë°°ì¹˜ ( êµ¬ë¶„ì„  í•„ìš” : addSeparator() )
+		jmFile.add(jmiNew); //ìƒˆê¸€
 		jmFile.addSeparator();
-		jmFile.add(jmiOpen); //¿­±â
-		jmFile.add(jmiSave); //ÀúÀå
-		jmFile.add(jmiNewSave); //»õÀÌ¸§À¸·Î
+		jmFile.add(jmiOpen); //ì—´ê¸°
+		jmFile.add(jmiSave); //ì €ì¥
+		jmFile.add(jmiNewSave); //ìƒˆì´ë¦„
 		jmFile.addSeparator();
-		jmFile.add(jmiEnd); //Á¾·á
+		jmFile.add(jmiEnd); //ë‹«ê¸°
 		
-		jmFormat.add(jmiFont); //¼­½Ä
+		jmFormat.add(jmiFont); //ì„œì‹
 		
-		jmHelp.add(jmiHelp); //µµ¿ò¸»
+		jmHelp.add(jmiHelp);//ë„ì›€ë§
 		
-		//¸Ş´º-> ¸Ş´º¹Ù ¹èÄ¡
-		jmb.add(jmFile);
-		jmb.add(jmFormat);
-		jmb.add(jmHelp);
+		//ë©”ë‰´->ë©”ë‰´ë°” ë°°ì¹˜
+		jmb.add( jmFile );
+		jmb.add( jmFormat );
+		jmb.add( jmHelp );
 		
-		//¸Ş´º¹Ù ÇÁ·¹ÀÓ ¹èÄ¡
+		//ë©”ë‰´ë°” í”„ë ˆì„ ë°°ì¹˜
 		setJMenuBar(jmb);
 		
-		//JTextArea ¸¦ Frame¿¡ ¹èÄ¡
+		//JTextAreaë¥¼ Frameì— ë°°ì¹˜
 		add("Center",jspNote);
 		
-		//ÀÌº¥Æ® Ã³¸® Å¬·¡½ºÀÇ °´Ã¼»ı¼º
-		JavaMemoEvt jme = new JavaMemoEvt(this);
+		//ì´ë²¤íŠ¸ ì²˜ë¦¬ í´ë˜ìŠ¤ì˜ ê°ì²´ìƒì„±.
+		JavaMemoEvt jme=new JavaMemoEvt(this);
+		//ì»´í¬ë„ŒíŠ¸ë¥¼ ì´ë²¤íŠ¸ì— ë“±ë¡í•˜ê³ , ì´ë²¤íŠ¸ ë°œìƒ ì‹œ ì²˜ë¦¬í•  ê°ì²´ ì„¤ì •í•œë‹¤
+		jmiFont.addActionListener( jme );
+
+		jmiNew.addActionListener( jme );
+		jmiOpen.addActionListener( jme );
+		jmiSave.addActionListener( jme );
+		jmiNewSave.addActionListener( jme );
+		jmiEnd.addActionListener( jme );
+
+		jmiHelp.addActionListener( jme );
 		
-		jmiFont.addActionListener(jme);
 		
-		addWindowListener(jme);
+		addWindowListener( jme );
 		
-		//À©µµ¿ì Å©±â¼³Á¤
+		//ìœˆë„ìš° í¬ê¸°ì„¤ì •.
 		setBounds(100, 100, 800, 700);
-		//°¡½ÃÈ­
+		//ê°€ì‹œí™”
 		setVisible(true);
 		
 	}//JavaMemo
-
-
 
 	public JMenuItem getJmiNew() {
 		return jmiNew;
@@ -109,5 +122,6 @@ public class JavaMemo extends JFrame {
 	public JTextArea getJtaNote() {
 		return jtaNote;
 	}
+	
 	
 }//class
